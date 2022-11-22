@@ -10,7 +10,7 @@ class DirectorService:
         return self.dao.get_one(director_id)
 
     def get_all(self):
-        return self.gao.get_all()
+        return self.dao.get_all()
 
     def create(self, data):
         return self.dao.create(data)
