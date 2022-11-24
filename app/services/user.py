@@ -20,9 +20,11 @@ class UserService:
         return self.dao.get_all()
 
     def create(self, data):
+        data["password"] = self.get_hash(data.get("password"))
         return self.dao.create(data)
 
     def update(self, data):
+        data["password"] = self.get_hash(data.get("password"))
         user_id = data.get("id")
         user = self.get_one(user_id)
 

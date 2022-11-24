@@ -3,6 +3,7 @@ from flask_restx import Resource, Namespace
 
 from app.container import genre_service
 from app.dao.models.genre import GenreSchema
+from decorators import auth_required, admin_required
 
 
 genres_ns = Namespace('genres')
@@ -13,10 +14,12 @@ genres_schema = GenreSchema(many=True)
 
 @genres_ns.route('/')
 class GenresView(Resource):
+    @auth_required
     def get(self):
         all_genres = genre_service.get_all()
         return genres_schema.dump(all_genres), 200
 
+    @admin_required
     def post(self):
         request_json = request.json
 
@@ -27,10 +30,12 @@ class GenresView(Resource):
 
 @genres_ns.route('/<int:id>')
 class GenreView(Resource):
+    @auth_required
     def get(self, id):
         genre = genre_service.get_one(id)
         return genre_schema.dump(genre), 200
 
+    @admin_required
     def put(self, id):
         request_json = request.json
         request_json["id"] = id
@@ -39,6 +44,7 @@ class GenreView(Resource):
 
         return "Genre updated successfully.", 204
 
+    @admin_required
     def delete(self, id):
         genre_service.delete(id)
 

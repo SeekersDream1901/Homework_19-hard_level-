@@ -1,10 +1,10 @@
 import calendar
 import datetime
-
 import jwt
 
 from constants import JWT_SECRET, JWT_ALGORITHM
 from app.services.user import UserService
+
 
 class AuthService:
     def __init__(self, user_service: UserService):
@@ -16,16 +16,16 @@ class AuthService:
         if user is None:
             raise Exception()
 
-        if not is_refresh:
+        if is_refresh:
             if not self.user_service.compare_password(user.password, password):
                 raise Exception()
 
         data = {
-            "username": user.name,
+            "username": user.username,
             "role": user.role
         }
 
-        access_token_lifetime = datetime.datetime.utcnow() + datetime.timedelta(minutes=60)
+        access_token_lifetime = datetime.datetime.utcnow() + datetime.timedelta(minutes=1)
         data["exp"] = calendar.timegm(access_token_lifetime.timetuple())
         access_token = jwt.encode(data, JWT_SECRET, JWT_ALGORITHM)
 

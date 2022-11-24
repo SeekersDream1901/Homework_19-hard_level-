@@ -6,8 +6,8 @@ class UserDAO:
     def __init__(self, session):
         self.session = session
 
-    def get_one(self, director_id):
-        return self.session.query(User).get(director_id)
+    def get_one(self, user_id):
+        return self.session.query(User).get(user_id)
 
     def get_by_username(self, username):
         return self.session.query(User).filter(User.username == username).first()
@@ -25,7 +25,8 @@ class UserDAO:
 
     def update(self, user_d):
         user = self.get_one(user_d.get("id"))
-        user.name = user_d.get("name")
+
+        user.username = user_d.get("username")
         user.password = user_d.get("password")
 
         self.session.add(user)
